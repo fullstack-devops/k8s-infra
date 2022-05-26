@@ -1,0 +1,40 @@
+{
+    "$id": "https://fullstack-devops.github.io/k8s-infra.infrastructure.json",
+    "$schema": "https://json-schema.org/draft-08/schema#",
+    "title": "K8s Ansible Infrastructure",
+    "description": "Schema can be used for forks of this https://github.com/fullstack-devops/k8s-infra",
+    "type": "object",
+    "patternProperties": {
+        "^helm_.*": {
+            "properties": {
+                "repo": {
+                    "type": "string"
+                },
+                "chart": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string",
+                    "enum": [
+                        "present",
+                        "absent"
+                    ]
+                },
+                "values_helm": {
+                    "type": "object"
+                },
+                "required": [
+                    "chart",
+                    "repo",
+                    "state",
+                    "values_helm",
+                    "version"
+                ]
+            }
+        },
+        "additionalProperties": false
+    }
+}
