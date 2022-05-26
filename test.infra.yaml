@@ -1,0 +1,7 @@
+helm_test:
+  chart: "github"
+  repo: github
+  state: present
+  version: 1.0.0
+  values_helm:
+    ingress:
