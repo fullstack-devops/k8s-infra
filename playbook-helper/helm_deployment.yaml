@@ -1,0 +1,51 @@
+- debug:
+    var: DEPLOYMENT_UNIT
+
+- name: Add Helm chart repositories
+  kubernetes.core.helm_repository:
+    state: present
+    name: "{{item.name}}"
+    repo_url: "{{item.url}}"
+    repo_username: "{{item.username}}"
+    repo_password: "{{item.password}}"
+  loop: "{{ helm.repos }}"
+  ignore_errors: yes
+  no_log: true
+
+- name: Update Helm chart repositories
+  command: "helm repo update"
+
+- name: Fill variables to be checked
+  set_fact:
+    deployment_names: "{{ deployment_names + [ item[5:] ] }}"
+  loop: "{{ query('varnames', '^helm_.*') }}"
+  when: DEPLOYMENT_UNIT == 'full-deployment'
+
+## Debugging
+- name: List helm charts
+  debug:
+    msg: "found Deployment {{ vars[item].chart }}"
+  loop: "{{ query('varnames', '^helm_.*') }}"
+  loop_control:
+    index_var: my_idx
+  when: DEPLOYMENT_UNIT == 'full-deployment'
+
+- name: Check for duplicates in helm release names
+  fail:
+    msg: "Found {{ query('varnames', '^helm_.*')|length }} helm names with {{ deployment_names|unique|length }} unique release names"
+  when: deployment_names|unique|length != query('varnames', '^helm_.*')|length and DEPLOYMENT_UNIT == 'full-deployment'
+
+- name: Deploying Helm Charts
+  kubernetes.core.helm:
+    name: "{{ item[5:] | lower }}"
+    chart_ref: "{{ lookup('vars', item).repo }}/{{ lookup('vars', item).chart }}"
+    chart_version: "{{ lookup('vars', item).version }}"
+    release_namespace: "{{ lookup('vars', item).namespace | default(ansible_host) }}"
+    create_namespace: yes
+    values: "{{ lookup('vars', item).values_helm }}"
+    release_state: "{{ lookup('vars', item).state }}"
+    wait: yes
+  loop: "{{ query('varnames', '^helm_.*') }}"
+  when:
+    - DEPLOYMENT_UNIT == item[5:] or DEPLOYMENT_UNIT == 'full-deployment'
+    #- item[5:] != lookup('env','DEPLOY_ANSIBLE')

@@ -1,0 +1,11 @@
+helm:
+  repos:
+    - { name: "fs-devops", url: "http://fullstack-devops.github.io/helm-charts/" }
+    - { name: "k8s-at-home", url: "https://k8s-at-home.com/charts/" }
+    - { name: "nginx-stable", url: "https://helm.nginx.com/stable" }
+    - { name: "metallb", url: "https://metallb.github.io/metallb" }
+    - { name: "jetstack", url: "https://charts.jetstack.io" }
+    - { name: "longhorn", url: "https://charts.longhorn.io" }
+
+cluster_domain: "{{ (DEPLOYMENT_SUFFIX | default('')) | lower}}.homelab.local"
+# environment: "dev"

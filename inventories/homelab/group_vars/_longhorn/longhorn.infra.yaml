@@ -1,0 +1,12 @@
+helm_longhorn:
+  repo: longhorn
+  chart: longhorn
+  version: 1.2.4
+  state: present
+  values_helm:
+    ingress:
+      enabled: true
+      host: longhorn{{ cluster_domain }}
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        nginx.ingress.kubernetes.io/ssl-redirect: "false"

@@ -1,0 +1,6 @@
+# helm values file
+values.yaml
+
+# Ansible vault password files
+.vault_pass
+.pass

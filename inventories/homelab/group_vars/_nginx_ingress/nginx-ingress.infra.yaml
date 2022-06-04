@@ -1,0 +1,11 @@
+helm_nginx-ingress:
+  repo: nginx-stable
+  chart: nginx-ingress
+  version: 0.13.2
+  state: present
+  values_helm:
+    service:
+      loadBalancerIP: "10.1.5.90"
+      annotations:
+        metallb.universe.tf/address-pool: network-services
+        metallb.universe.tf/allow-shared-ip: infra-svc
