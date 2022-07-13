@@ -6,6 +6,7 @@
     "type": "object",
     "patternProperties": {
         "^helm_.*": {
+            "type": "object",
             "properties": {
                 "repo": {
                     "type": "string"
@@ -25,16 +26,18 @@
                 },
                 "values_helm": {
                     "type": "object"
-                },
-                "required": [
-                    "chart",
-                    "repo",
-                    "state",
-                    "values_helm",
-                    "version"
-                ]
-            }
+                }
+            },
+            "required": [
+                "chart",
+                "repo",
+                "state",
+                "values_helm",
+                "version"
+            ],
+            "additionalProperties": false
         },
+        "minProperties": 1,
         "additionalProperties": false
     }
 }
