@@ -3,14 +3,13 @@
 
 - name: Add Helm chart repositories
   kubernetes.core.helm_repository:
-    state: present
     name: "{{item.name}}"
     repo_url: "{{item.url}}"
-    repo_username: "{{item.username}}"
-    repo_password: "{{item.password}}"
+    repo_username: "{{ item.username | default('') }}"
+    repo_password: "{{ item.password | default('') }}"
   loop: "{{ helm.repos }}"
   ignore_errors: yes
-  no_log: true
+  # no_log: true
 
 - name: Update Helm chart repositories
   command: "helm repo update"

@@ -9,13 +9,4 @@
   vars_files:
     - app_latest_versions.yml
   tasks:
-    - name: Debug Infos
-      debug:
-        msg:
-          - "DEPLOYMENT_UNIT: {{ DEPLOYMENT_UNIT }}"
-          - "DEPLOYMENT_STATE: {{ DEPLOYMENT_STATE }}"
-          - "DEPLOYMENT_VERSION: {{ DEPLOYMENT_VERSION | default('not-set') }}"
-          - "DEPLOYMENT_SUFFIX: {{ DEPLOYMENT_SUFFIX }}"
-          - "Release namespace: {{ ansible_host }}"
-
     - include_tasks: playbook-helper/helm_deployment.yaml
