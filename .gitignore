@@ -1,6 +1,12 @@
-# helm values file
+# helm values file (for testing)
 values.yaml
 
 # Ansible vault password files
 .vault_pass
 .pass
+
+# manual folders
+manual-tests/*
+!manual-tests/*.template.y*
+manual-deploy/*
+!manual-deploy/*.template.y*

@@ -1,0 +1,98 @@
+# https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml
+helm_prometheus-stack:
+  repo: "prometheus-community"
+  chart: "prometheus"
+  version: "15.12.0" # helm search repo prometheus-community/prometheus-community -l
+  state: present
+  values_helm:
+    alertmanager:
+    #   nodeSelector:
+    #     kubernetes.io/arch: "arm64"
+      persistentVolume:
+        storageClass: "longhorn"
+      resources:
+        limits:
+          cpu: 10m
+          memory: 32Mi
+        requests:
+          cpu: 10m
+          memory: 32Mi
+    
+    configmapReload:
+      prometheus:
+        resources:
+          limits:
+            cpu: 5m
+            memory: 24Mi
+          requests:
+            cpu: 5m
+            memory: 24Mi
+      alertmanager:
+        resources:
+          limits:
+            cpu: 5m
+            memory: 24Mi
+          requests:
+            cpu: 5m
+            memory: 24Mi
+      
+    nodeExporter:
+      resources:
+        limits:
+          cpu: 200m
+          memory: 50Mi
+        requests:
+          cpu: 100m
+          memory: 30Mi
+    
+    server:
+      nodeSelector:
+        kubernetes.io/arch: "arm64"
+      persistentVolume:
+        storageClass: "longhorn"
+      resources:
+        limits:
+          cpu: 800m
+          memory: 2048Mi
+        requests:
+          cpu: 500m
+          memory: 2048Mi
+    
+    kubeStateMetrics:
+      enabled: true
+      kube-state-metrics:
+        nodeSelector:
+          kubernetes.io/arch: "arm64"
+        resources:
+          limits:
+            cpu: 100m
+            memory: 64Mi
+          requests:
+            cpu: 10m
+            memory: 32Mi
+
+    pushgateway:
+      nodeSelector:
+        kubernetes.io/arch: "arm64"
+      resources:
+        limits:
+          cpu: 10m
+          memory: 32Mi
+        requests:
+          cpu: 10m
+          memory: 32Mi
+
+    serverFiles:
+      alerting_rules.yml: {}
+      # groups:
+      #   - name: Instances
+      #     rules:
+      #       - alert: InstanceDown
+      #         expr: up == 0
+      #         for: 5m
+      #         labels:
+      #           severity: page
+      #         annotations:
+      #           description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5 minutes.'
+      #           summary: 'Instance {{ $labels.instance }} down'
+      recording_rules.yml: {}

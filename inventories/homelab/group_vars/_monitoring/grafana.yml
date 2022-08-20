@@ -1,0 +1,43 @@
+# Imported Dashborads 1860, 6417, 9614
+helm_grafana:
+  repo: "grafana"
+  chart: "grafana"
+  version: "6.32.14" # helm search repo grafana/grafana -l
+  state: present
+  values_helm:
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        # kubernetes.io/tls-acme: "true"
+      hosts:
+        - grafana{{ cluster_domain }}
+      tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+    persistence:
+      enabled: true
+      storageClassName: longhorn
+      accessModes:
+        - ReadWriteOnce
+      size: 5Gi
+    adminUser: admin
+    adminPassword: admin
+    datasources:
+      datasources.yaml:
+        apiVersion: 1
+        datasources:
+        - name: Prometheus
+          type: prometheus
+          editable: false
+          url: http://prometheus-stack-server.monitoring.svc:80
+          access: proxy
+          isDefault: true
+    livenessProbe:
+      httpGet:
+        path: /api/health
+        port: 3000
+      initialDelaySeconds: 120
+      timeoutSeconds: 30
+      failureThreshold: 10

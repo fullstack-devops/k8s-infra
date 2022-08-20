@@ -1,0 +1,28 @@
+helm_cert-manager:
+  repo: "jetstack"
+  chart: cert-manager
+  version: "1.9.1" # helm search repo gitlab/gitlab-runner -l
+  state: present
+  values_helm:
+    installCRDs: true
+    image:
+      repository: quay.io/jetstack/cert-manager-controller-arm
+    nodeSelector:
+      kubernetes.io/arch: "arm64"
+    webhook:
+      image:
+        repository: quay.io/jetstack/cert-manager-webhook-arm
+      nodeSelector:
+        kubernetes.io/arch: "arm64"
+    cainjector:
+      image:
+        repository: quay.io/jetstack/cert-manager-cainjector-arm
+      nodeSelector:
+        kubernetes.io/arch: "arm64"
+      extraArgs:
+        - --leader-elect=false
+    startupapicheck:
+      image:
+        repository: quay.io/jetstack/cert-manager-ctl-arm
+      nodeSelector:
+        kubernetes.io/arch: "arm64"

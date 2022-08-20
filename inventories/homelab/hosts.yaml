@@ -7,3 +7,6 @@ _longhorn:
 _nginx_ingress:
   hosts:
     nginx-ingress:
+_monitoring:
+  hosts:
+    monitoring:
