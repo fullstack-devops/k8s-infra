@@ -1,0 +1,42 @@
+helm_dns-bind:
+  repo: "fs-devops"
+  chart: dns-bind
+  version: "0.1.4" # helm search repo fs-devops/dns-bind -l
+  state: present
+  values_helm:
+    image:
+      repository: ghcr.io/fullstack-devops/dns-bind
+    envValues:
+      debug_entrypoint: "0"
+      docker_logs: "0"
+      wildcard_dns: "homelab.tld=10.1.5.90"
+      extra_hosts:
+      dnssec_validate: "no"
+      dns_forwarder:
+      ttl_time: 3600
+      refresh_time: 1200
+      retry_time: 180
+      expiry_time: 1209600
+      max_cache_time: 10800
+      allow_query:
+      allow_recursion:
+    serviceDns:
+      type: LoadBalancer
+      nodePort:
+      clusterIP:
+      externalIPs: {}
+      externalTrafficPolicy: Local
+      loadBalancerIP: 10.1.5.99
+      loadBalancerIPv6:
+      annotations:
+        metallb.universe.tf/address-pool: network-services
+        metallb.universe.tf/allow-shared-ip: "true"
+    nodeSelector:
+      kubernetes.io/arch: "arm64"
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 80m
+        memory: 64Mi

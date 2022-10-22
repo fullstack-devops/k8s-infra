@@ -10,3 +10,6 @@ _nginx_ingress:
 _monitoring:
   hosts:
     monitoring:
+_smarthome:
+  hosts:
+    smarthome:
