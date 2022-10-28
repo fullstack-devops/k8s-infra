@@ -6,6 +6,7 @@
     "type": "object",
     "patternProperties": {
         "^helm_.*": {
+            "type": "object",
             "properties": {
                 "repo": {
                     "type": "string"
@@ -33,7 +34,8 @@
                 "state",
                 "values_helm",
                 "version"
-            ]
+            ],
+            "additionalProperties": false
         },
         "additionalProperties": false
     }
